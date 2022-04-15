@@ -3,10 +3,19 @@ package com.javaxpert.labs.poker;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+import static io.vavr.API.*;
 import io.vavr.control.Either;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.BiFunction;
+
+
+
 
 public class HandCheckerTest {
   private static Hand typicalHand;
@@ -18,6 +27,7 @@ public class HandCheckerTest {
   private static Hand handWithFourOfAKind;
   private static Hand handWithFlush;
   private static Hand handWithRoyalFlush;
+  private static Hand handWithStraight;
   private HandChecker checker;
 
   @BeforeAll
@@ -74,8 +84,8 @@ public class HandCheckerTest {
     handWithFlush.addCard(new Card(Suit.CLUB,Rank.NINE));
     handWithFlush.addCard(new Card(Suit.CLUB,Rank.TEN));
     handWithFlush.addCard(new Card(Suit.CLUB,Rank.JACK));
-    handWithFlush.addCard(new Card(Suit.DIAMOND,Rank.QUEEN));
-    handWithFlush.addCard(new Card(Suit.DIAMOND,Rank.KING));
+    handWithFlush.addCard(new Card(Suit.CLUB,Rank.QUEEN));
+    handWithFlush.addCard(new Card(Suit.CLUB,Rank.KING));
 
     handWithRoyalFlush=new Hand();
     handWithRoyalFlush.addCard(new Card(Suit.CLUB,Rank.ACE));
@@ -83,6 +93,13 @@ public class HandCheckerTest {
     handWithRoyalFlush.addCard(new Card(Suit.CLUB,Rank.QUEEN));
     handWithRoyalFlush.addCard(new Card(Suit.CLUB,Rank.JACK));
     handWithRoyalFlush.addCard(new Card(Suit.CLUB,Rank.TEN));
+
+    handWithStraight=new Hand();
+    handWithStraight.addCard(new Card(Suit.CLUB,Rank.SEVEN));
+    handWithStraight.addCard(new Card(Suit.CLUB,Rank.SIX));
+    handWithStraight.addCard(new Card(Suit.SPADE,Rank.EIGHT));
+    handWithStraight.addCard(new Card(Suit.HEART,Rank.NINE));
+    handWithStraight.addCard(new Card(Suit.HEART,Rank.TEN));
   }
 
   @BeforeEach
@@ -126,10 +143,18 @@ public class HandCheckerTest {
 
   @Test
   void shouldDetectFlush(){
-    //assertTrue(checker.containsFlush(handWithFlush));
+    assertTrue(checker.handContainsStraightFlush(handWithFlush));
     assertTrue(checker.handContainsStraightFlush(handWithRoyalFlush));
     assertFalse(checker.handContainsStraightFlush(dummyHand));
   }
+
+  @Test
+  void shouldDetectStraight(){
+  //assertTrue(checker.handContainsStraight(handWithStraight));
+  //assertFalse(checker.handContainsStraight(dummyHand));
+  }
+
+
 
 
 }

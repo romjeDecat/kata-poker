@@ -2,16 +2,16 @@ package com.javaxpert.labs.poker;
 
 public enum Rank {
     ACE,
-    KING,
-    QUEEN,
-    JACK,
-    TEN,
-    NINE,
-    EIGHT,
-    SEVEN,
-    SIX,
-    FIVE,
-    FOUR,
+    TWO,
     THREE,
-    TWO
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    TEN,
+    JACK,
+    QUEEN,
+    KING
 }

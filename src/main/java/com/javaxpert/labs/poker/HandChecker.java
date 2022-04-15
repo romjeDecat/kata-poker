@@ -1,15 +1,11 @@
 package com.javaxpert.labs.poker;
 
-import io.vavr.Tuple;
-import io.vavr.collection.*;
-
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class HandChecker {
 
     private boolean handContainsNCardsWithSameRank(Hand targetHand,int thresholdValue){
-        return targetHand.getCards().get().groupBy( card -> card.getValue()).filter((value, cards) -> cards.size()==thresholdValue).size()>0;
+        return targetHand.getCards().get().groupBy( card -> card.getRank()).filter((value, cards) -> cards.size()==thresholdValue).size()>0;
     }
     public boolean containsPair(Hand targetHand) {
         return handContainsNCardsWithSameRank(targetHand,2);
@@ -27,4 +23,10 @@ public class HandChecker {
         return targetHand.getCards().get().groupBy(card -> card.getSuit()).filter((suit, cards) -> cards.size()==5).size()==1;
     }
 
+  /*  public boolean handContainsStraight(Hand targetHand) {
+        java.util.List<Rank> ranksList = targetHand.getCards().get().map(card -> card.getRank()).collect(Collectors.toList());
+        ranksList.sort((rank1, rank2) ->rank1.compareTo(rank2) );
+
+        return (ranksList.get(4)-ranksList.get(0) );
+    }*/
 }
