@@ -16,6 +16,8 @@ public class HandCheckerTest {
   private static Hand handWithPair;
   private static Hand handWithThreeOfAKind;
   private static Hand handWithFourOfAKind;
+  private static Hand handWithFlush;
+  private static Hand handWithRoyalFlush;
   private HandChecker checker;
 
   @BeforeAll
@@ -67,6 +69,20 @@ public class HandCheckerTest {
     handWithFourOfAKind.addCard(new Card(Suit.HEART,Rank.KING));
     handWithFourOfAKind.addCard(new Card(Suit.SPADE,Rank.KING));
     handWithFourOfAKind.addCard(new Card(Suit.CLUB,Rank.TEN));
+
+    handWithFlush =new Hand();
+    handWithFlush.addCard(new Card(Suit.CLUB,Rank.NINE));
+    handWithFlush.addCard(new Card(Suit.CLUB,Rank.TEN));
+    handWithFlush.addCard(new Card(Suit.CLUB,Rank.JACK));
+    handWithFlush.addCard(new Card(Suit.DIAMOND,Rank.QUEEN));
+    handWithFlush.addCard(new Card(Suit.DIAMOND,Rank.KING));
+
+    handWithRoyalFlush=new Hand();
+    handWithRoyalFlush.addCard(new Card(Suit.CLUB,Rank.ACE));
+    handWithRoyalFlush.addCard(new Card(Suit.CLUB,Rank.KING));
+    handWithRoyalFlush.addCard(new Card(Suit.CLUB,Rank.QUEEN));
+    handWithRoyalFlush.addCard(new Card(Suit.CLUB,Rank.JACK));
+    handWithRoyalFlush.addCard(new Card(Suit.CLUB,Rank.TEN));
   }
 
   @BeforeEach
@@ -106,6 +122,13 @@ public class HandCheckerTest {
   void shouldDetectFourOfAKind(){
     assertTrue(checker.containsFourOfAKind(handWithFourOfAKind));
     assertFalse(checker.containsFourOfAKind(dummyHand));
+  }
+
+  @Test
+  void shouldDetectFlush(){
+    //assertTrue(checker.containsFlush(handWithFlush));
+    assertTrue(checker.handContainsStraightFlush(handWithRoyalFlush));
+    assertFalse(checker.handContainsStraightFlush(dummyHand));
   }
 
 
