@@ -12,4 +12,8 @@ public class HandChecker {
     public boolean containsThreeOfAKind(Hand targetHand) {
         return handContainsNCardsWithSameRank(targetHand,3);
     }
+
+    public boolean containsFourOfAKind(Hand  targetHand){
+        return handContainsNCardsWithSameRank(targetHand,4);
+    }
 }
