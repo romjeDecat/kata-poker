@@ -14,6 +14,7 @@ public class HandCheckerTest {
   private static Hand oversizedHand;
   private static Hand dummyHand;
   private static Hand handWithPair;
+  private static Hand handWithThreeOfAKind;
   private HandChecker checker;
 
   @BeforeAll
@@ -52,6 +53,12 @@ public class HandCheckerTest {
     handWithPair.addCard(new Card(Suit.CLUB, Rank.NINE));
     handWithPair.addCard(new Card(Suit.CLUB, Rank.ACE));
 
+    handWithThreeOfAKind = new Hand();
+    handWithThreeOfAKind.addCard(new Card(Suit.CLUB,Rank.ACE));
+    handWithThreeOfAKind.addCard(new Card(Suit.SPADE,Rank.ACE));
+    handWithThreeOfAKind.addCard(new Card(Suit.DIAMOND,Rank.ACE));
+    handWithThreeOfAKind.addCard(new Card(Suit.HEART,Rank.TWO));
+    handWithThreeOfAKind.addCard(new Card(Suit.HEART,Rank.THREE));
   }
 
   @BeforeEach
@@ -79,6 +86,12 @@ public class HandCheckerTest {
   void shouldDetectOnePair(){
     assertTrue(checker.containsPair(handWithPair));
     assertFalse(checker.containsPair(dummyHand));
+  }
+
+  @Test
+  void shouldDetectThreeOfAKind(){
+    assertTrue(checker.containsThreeOfAKind(handWithThreeOfAKind));
+    assertFalse(checker.containsThreeOfAKind(dummyHand));
   }
 
 
