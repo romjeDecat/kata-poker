@@ -160,6 +160,12 @@ public class HandCheckerTest {
     assertFalse(checker.handContainsStraightFlush(dummyHand));
   }
 
+  @Test
+  void royalFlushShouldBeDetected(){
+    assertTrue(checker.handContainsRoyalFlush(handWithRoyalFlush));
+    //assertFalse(ch);
+  }
+
 
 
 }

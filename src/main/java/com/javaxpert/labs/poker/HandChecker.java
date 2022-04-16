@@ -55,4 +55,9 @@ public class HandChecker {
     public boolean handContainsFlush(Hand targetHand) {
         return targetHand.getCards().get().groupBy(card ->card.getSuit()).filter((suit, cards) ->cards.size()==5).size()==1;
     }
+
+    public boolean handContainsRoyalFlush(Hand targetHand) {
+        boolean  handContainsAce = targetHand.getCards().get().filter(c-> c.getRank()==Rank.ACE).size()==1;
+        return  handContainsStraightFlush(targetHand) && handContainsAce;
+    }
 }
