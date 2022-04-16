@@ -28,6 +28,7 @@ public class HandCheckerTest {
   private static Hand handWithFlush;
   private static Hand handWithRoyalFlush;
   private static Hand handWithStraight;
+  private static Hand handWithStraightFlush;
   private HandChecker checker;
 
   @BeforeAll
@@ -100,6 +101,13 @@ public class HandCheckerTest {
     handWithStraight.addCard(new Card(Suit.SPADE,Rank.EIGHT));
     handWithStraight.addCard(new Card(Suit.HEART,Rank.NINE));
     handWithStraight.addCard(new Card(Suit.HEART,Rank.TEN));
+
+    handWithStraightFlush = new Hand();
+    handWithStraightFlush.addCard(new Card(Suit.CLUB,Rank.FOUR));
+    handWithStraightFlush.addCard(new Card(Suit.CLUB,Rank.FIVE));
+    handWithStraightFlush.addCard(new Card(Suit.CLUB,Rank.SIX));
+    handWithStraightFlush.addCard(new Card(Suit.CLUB,Rank.SEVEN));
+    handWithStraightFlush.addCard(new Card(Suit.CLUB,Rank.EIGHT));
   }
 
   @BeforeEach
@@ -156,6 +164,7 @@ public class HandCheckerTest {
 
   @Test
   void shouldDetectStraightFlush(){
+    assertTrue(checker.handContainsStraightFlush(handWithStraightFlush));
     assertTrue(checker.handContainsStraightFlush(handWithRoyalFlush));
     assertFalse(checker.handContainsStraightFlush(dummyHand));
   }
@@ -163,6 +172,7 @@ public class HandCheckerTest {
   @Test
   void royalFlushShouldBeDetected(){
     assertTrue(checker.handContainsRoyalFlush(handWithRoyalFlush));
+    assertFalse(checker.handContainsRoyalFlush(handWithStraightFlush));
     //assertFalse(ch);
   }
 
