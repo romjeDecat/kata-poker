@@ -1,5 +1,12 @@
 package com.javaxpert.labs.poker;
 
+import io.vavr.Tuple2;
+import io.vavr.collection.Array;
+import io.vavr.collection.List;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class HandChecker {
@@ -23,10 +30,23 @@ public class HandChecker {
         return targetHand.getCards().get().groupBy(card -> card.getSuit()).filter((suit, cards) -> cards.size()==5).size()==1;
     }
 
-  /*  public boolean handContainsStraight(Hand targetHand) {
-        java.util.List<Rank> ranksList = targetHand.getCards().get().map(card -> card.getRank()).collect(Collectors.toList());
-        ranksList.sort((rank1, rank2) ->rank1.compareTo(rank2) );
+    /**
+     * use a double storage for ranks list because ACE  rank has 2 values
+     *
+     * @param targetHand
+     * @return
+     */
+    public boolean handContainsStraight(Hand targetHand) {
+        java.util.List<Tuple2<Integer,Integer>> rawRanksList = targetHand.getCards().get().map(card -> RankHelper.valueFromRank(card.getRank())).collect(Collectors.toList());
+        java.util.List<Tuple2<Integer,Integer>> copyRanksList=new ArrayList<>(rawRanksList);
+        Comparator<Tuple2<Integer,Integer>> compareUsingAceMaxValue = (o, t1) -> o._1().compareTo(t1._1());
+        Comparator<Tuple2<Integer,Integer>> compareUsingAceMinValue = (o, t1) -> o._2().compareTo(t1._2());
 
-        return (ranksList.get(4)-ranksList.get(0) );
-    }*/
+        Collections.sort(rawRanksList,compareUsingAceMaxValue);
+        Collections.sort(copyRanksList,compareUsingAceMinValue);
+        //Array<Integer> ranksWithAceMax = ranksList.sortBy(compareUsingAceMaxValue,integerIntegerTuple2 -> integerIntegerTuple2._1);
+       // Array<Integer> ranksWithAceMin = ranksList.sortBy((o, t1) -> o._2.compareTo(t1._2()));
+        //return (ranksWithAceMax.get(4)-ranksWithAceMax.get(0)==4 || ranksWithAceMin.get(4)-ranksWithAceMin.get(0)==4 );
+        return (rawRanksList.get(4)._1-rawRanksList.get(0)._1==4 || copyRanksList.get(4)._2 - copyRanksList.get(0)._2 == 4);
+    }
 }

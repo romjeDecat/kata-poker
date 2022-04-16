@@ -150,7 +150,7 @@ public class HandCheckerTest {
 
   @Test
   void shouldDetectStraight(){
-  //assertTrue(checker.handContainsStraight(handWithStraight));
+  assertTrue(checker.handContainsStraight(handWithStraight));
   //assertFalse(checker.handContainsStraight(dummyHand));
   }
 

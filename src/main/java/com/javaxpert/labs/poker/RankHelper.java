@@ -23,7 +23,7 @@ public class RankHelper {
 
     }
 
-    public static Tuple2 valueFromRank(Rank targetRank){
+    public static Tuple2<Integer,Integer> valueFromRank(Rank targetRank){
         //BiFunction<Integer, List<Integer>,Boolean> contains = (t,u) -> u.contains(t);
 
         Tuple2<Integer,Integer> value = Match(targetRank.ordinal()).of
