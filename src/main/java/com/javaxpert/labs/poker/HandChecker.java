@@ -60,4 +60,8 @@ public class HandChecker {
         boolean  handContainsAce = targetHand.getCards().get().filter(c-> c.getRank()==Rank.ACE).size()==1;
         return  handContainsStraightFlush(targetHand) && handContainsAce;
     }
+
+    public boolean contains2Pairs(Hand targetHand) {
+        return targetHand.getCards().get().groupBy(card -> card.getSuit()).filter( (suit, cards) -> cards.size()==2).size()==2;
+    }
 }

@@ -29,7 +29,9 @@ public class HandCheckerTest {
   private static Hand handWithRoyalFlush;
   private static Hand handWithStraight;
   private static Hand handWithStraightFlush;
+  private static Hand handWith2Pairs;
   private HandChecker checker;
+
 
   @BeforeAll
   static void setupHands(){
@@ -108,6 +110,13 @@ public class HandCheckerTest {
     handWithStraightFlush.addCard(new Card(Suit.CLUB,Rank.SIX));
     handWithStraightFlush.addCard(new Card(Suit.CLUB,Rank.SEVEN));
     handWithStraightFlush.addCard(new Card(Suit.CLUB,Rank.EIGHT));
+
+    handWith2Pairs = new Hand();
+    handWith2Pairs.addCard(new Card(Suit.CLUB,Rank.SEVEN));
+    handWith2Pairs.addCard(new Card(Suit.CLUB,Rank.EIGHT));
+    handWith2Pairs.addCard(new Card(Suit.DIAMOND,Rank.SEVEN));
+    handWith2Pairs.addCard(new Card(Suit.DIAMOND,Rank.EIGHT));
+    handWith2Pairs.addCard(new Card(Suit.HEART,Rank.ACE));
   }
 
   @BeforeEach
@@ -176,6 +185,14 @@ public class HandCheckerTest {
     //assertFalse(ch);
   }
 
+  @Test
+  void handWIth2PairsShouldBeDetected(){
+    assertTrue(checker.contains2Pairs(handWith2Pairs));
+    assertFalse(checker.contains2Pairs(handWithPair));
+    assertFalse(checker.contains2Pairs(handWithRoyalFlush));
+    assertFalse(checker.contains2Pairs(dummyHand));
+
+  }
 
 
 }
