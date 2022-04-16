@@ -143,17 +143,22 @@ public class HandCheckerTest {
 
   @Test
   void shouldDetectFlush(){
-    assertTrue(checker.handContainsStraightFlush(handWithFlush));
-    assertTrue(checker.handContainsStraightFlush(handWithRoyalFlush));
-    assertFalse(checker.handContainsStraightFlush(dummyHand));
+    assertTrue(checker.handContainsFlush(handWithFlush));
+    assertTrue(checker.handContainsFlush(handWithRoyalFlush));
+    assertFalse(checker.handContainsFlush(dummyHand));
   }
 
   @Test
   void shouldDetectStraight(){
   assertTrue(checker.handContainsStraight(handWithStraight));
-  //assertFalse(checker.handContainsStraight(dummyHand));
+  assertFalse(checker.handContainsStraight(dummyHand));
   }
 
+  @Test
+  void shouldDetectStraightFlush(){
+    assertTrue(checker.handContainsStraightFlush(handWithRoyalFlush));
+    assertFalse(checker.handContainsStraightFlush(dummyHand));
+  }
 
 
 
