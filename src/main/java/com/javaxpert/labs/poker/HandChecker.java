@@ -28,7 +28,7 @@ public class HandChecker {
     }
 
     public boolean handContainsStraightFlush(Hand targetHand) {
-        return targetHand.getCards().get().groupBy(card -> card.getSuit()).filter((suit, cards) -> cards.size() == 5).size() == 1 && handContainsStraight(targetHand);
+        return handContainsFlush(targetHand) && handContainsStraight(targetHand);
     }
 
     /**
