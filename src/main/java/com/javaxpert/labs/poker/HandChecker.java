@@ -1,5 +1,7 @@
 package com.javaxpert.labs.poker;
 
+import io.vavr.Function2;
+import io.vavr.Function3;
 import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import io.vavr.collection.List;
@@ -7,6 +9,7 @@ import io.vavr.collection.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class HandChecker {
@@ -62,6 +65,12 @@ public class HandChecker {
     }
 
     public boolean contains2Pairs(Hand targetHand) {
-        return targetHand.getCards().get().groupBy(card -> card.getSuit()).filter( (suit, cards) -> cards.size()==2).size()==2;
+        Function3<Integer,Integer,Hand,Boolean> generalFunction = Function3.of(this::handContainsAtLeastNOccurencesOfTheSameRankGroup);
+        return generalFunction.apply(2,2,targetHand);
+        //return targetHand.getCards().get().groupBy(card -> card.getSuit()).filter( (suit, cards) -> cards.size()==2).size()==2;
+    }
+
+    private boolean handContainsAtLeastNOccurencesOfTheSameRankGroup(int numOccurences,int groupSize,Hand targetHand){
+        return targetHand.getCards().get().groupBy(card -> card.getRank()).filter(((suit, cards) -> cards.size()==groupSize)).size()==numOccurences;
     }
 }
