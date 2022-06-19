@@ -36,6 +36,7 @@ public class HandChecker {
 
     /**
      * use a double storage for ranks list because ACE  rank has 2 values
+     * MIN value (1) & MAX VALUE GREATER THAN KING
      *
      * @param targetHand
      * @return
