@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 public class HandChecker {
 
     private boolean handContainsNCardsWithSameRank(Hand targetHand, int thresholdValue) {
-        return targetHand.getCards().get().groupBy(card -> card.getRank()).filter((value, cards) -> cards.size() == thresholdValue).size() > 0;
+        return targetHand.getCards().get().
+                groupBy(card -> card.getRank())
+                .filter((value, cards) -> cards.size() == thresholdValue).size() > 0;
     }
 
     public boolean containsPair(Hand targetHand) {
@@ -57,7 +59,10 @@ public class HandChecker {
 
 
     public boolean handContainsFlush(Hand targetHand) {
-        return targetHand.getCards().get().groupBy(card ->card.getSuit()).filter((suit, cards) ->cards.size()==5).size()==1;
+        return targetHand.getCards().get().
+                groupBy(card ->card.getSuit())
+                .filter((suit, cards) ->cards.size()==5)
+                .size()==1;
     }
 
     public boolean handContainsRoyalFlush(Hand targetHand) {
@@ -66,12 +71,14 @@ public class HandChecker {
     }
 
     public boolean contains2Pairs(Hand targetHand) {
-        Function3<Integer,Integer,Hand,Boolean> generalFunction = Function3.of(this::handContainsAtLeastNOccurencesOfTheSameRankGroup);
+        Function3<Integer,Integer,Hand,Boolean> generalFunction =
+                Function3.of(this::handContainsAtLeastNOccurencesOfTheSameRankGroup);
         return generalFunction.apply(2,2,targetHand);
-        //return targetHand.getCards().get().groupBy(card -> card.getSuit()).filter( (suit, cards) -> cards.size()==2).size()==2;
     }
 
     private boolean handContainsAtLeastNOccurencesOfTheSameRankGroup(int numOccurences,int groupSize,Hand targetHand){
-        return targetHand.getCards().get().groupBy(card -> card.getRank()).filter(((suit, cards) -> cards.size()==groupSize)).size()==numOccurences;
+        return targetHand.getCards().get()
+                .groupBy(card -> card.getRank())
+                .filter(((suit, cards) -> cards.size()==groupSize)).size()==numOccurences;
     }
 }
