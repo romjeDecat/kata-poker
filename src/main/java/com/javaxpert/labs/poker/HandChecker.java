@@ -1,15 +1,15 @@
 package com.javaxpert.labs.poker;
 
-import io.vavr.Function2;
 import io.vavr.Function3;
 import io.vavr.Tuple2;
-import io.vavr.collection.Array;
 import io.vavr.collection.List;
+import io.vavr.collection.Map;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class HandChecker {
@@ -80,5 +80,19 @@ public class HandChecker {
         return targetHand.getCards().get()
                 .groupBy(card -> card.getRank())
                 .filter(((suit, cards) -> cards.size()==groupSize)).size()==numOccurences;
+    }
+
+    public boolean genericContains2Pairs(Hand targetHand){
+        return  handGroupingBySize(targetHand,(card)-> card.getRank(),(tuple2)-> (tuple2._2.size()==2 ));
+    }
+
+
+    private boolean handGroupingBySize(Hand targetHand, Function<Card,Criteria> groupingFunction,
+                                       Predicate<Tuple2<Criteria, List<Card>>> predicate){
+        return targetHand.getCards().get()
+                .groupBy(groupingFunction)
+                .filter((card) ->predicate.test(card))
+                .size()==2;
+
     }
 }

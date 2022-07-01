@@ -194,5 +194,11 @@ public class HandCheckerTest {
 
   }
 
+  @Test
+  void setHandWith2PairsShouldBeDetectedBygenericFunction(){
+    assertTrue(checker.genericContains2Pairs(handWith2Pairs));
+    assertFalse(checker.genericContains2Pairs(dummyHand));
+  }
+
 
 }
