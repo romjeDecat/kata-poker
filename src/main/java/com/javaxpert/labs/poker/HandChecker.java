@@ -17,7 +17,7 @@ public class HandChecker {
 
     public boolean containsPair(Hand targetHand) {
         return handConformsToCriterias(targetHand,
-                card -> card.getRank(),
+                Card::getRank,
                 (tuple2)-> (tuple2._2.size()==2 ),
                 ()-> 1
                 );
@@ -25,7 +25,7 @@ public class HandChecker {
 
     public boolean containsThreeOfAKind(Hand targetHand) {
         return handConformsToCriterias(targetHand,
-                card -> card.getRank(),
+                Card::getRank,
                 (tuple2)-> (tuple2._2.size()==3 ),
                 ()-> 1
         );
@@ -35,7 +35,7 @@ public class HandChecker {
 
     public boolean containsFourOfAKind(Hand targetHand) {
         return handConformsToCriterias(targetHand,
-                card -> card.getRank(),
+                Card::getRank,
                 (tuple2)-> (tuple2._2.size()==4 ),
                 ()-> 1)
         ;
@@ -69,7 +69,7 @@ public class HandChecker {
 
     public boolean handContainsFlush(Hand targetHand) {
         return handConformsToCriterias(targetHand,
-                card -> card.getSuit(),
+                Card::getSuit,
                 (tuple2)-> (tuple2._2.size()==5 ),
                 ()-> 1
         );
@@ -82,7 +82,7 @@ public class HandChecker {
 
     public boolean contains2Pairs(Hand targetHand) {
         return handConformsToCriterias(targetHand,
-                card -> card.getRank(),
+                Card::getRank,
                 (tuple2)-> (tuple2._2.size()==2 ),
                 ()-> 2);
     }
@@ -103,7 +103,7 @@ public class HandChecker {
                                             Function0<Integer> sizeCriteria){
         return targetHand.getCards().get()
                 .groupBy(groupingFunction)
-                .filter((card)-> predicate.test(card))
+                .filter(predicate)
                 .size()==sizeCriteria.apply()
                 ;
 
