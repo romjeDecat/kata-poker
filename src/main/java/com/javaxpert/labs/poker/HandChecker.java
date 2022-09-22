@@ -1,9 +1,9 @@
 package com.javaxpert.labs.poker;
 
+import io.vavr.Function0;
 import io.vavr.Function3;
 import io.vavr.Tuple2;
 import io.vavr.collection.List;
-import io.vavr.collection.Map;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,22 +14,31 @@ import java.util.stream.Collectors;
 
 public class HandChecker {
 
-    private boolean handContainsNCardsWithSameRank(Hand targetHand, int thresholdValue) {
-        return targetHand.getCards().get().
-                groupBy(card -> card.getRank())
-                .filter((value, cards) -> cards.size() == thresholdValue).size() > 0;
-    }
 
     public boolean containsPair(Hand targetHand) {
-        return handContainsNCardsWithSameRank(targetHand, 2);
+        return handConformsToCriterias(targetHand,
+                card -> card.getRank(),
+                (tuple2)-> (tuple2._2.size()==2 ),
+                ()-> 1
+                );
     }
 
     public boolean containsThreeOfAKind(Hand targetHand) {
-        return handContainsNCardsWithSameRank(targetHand, 3);
+        return handConformsToCriterias(targetHand,
+                card -> card.getRank(),
+                (tuple2)-> (tuple2._2.size()==3 ),
+                ()-> 1
+        );
+
+
     }
 
     public boolean containsFourOfAKind(Hand targetHand) {
-        return handContainsNCardsWithSameRank(targetHand, 4);
+        return handConformsToCriterias(targetHand,
+                card -> card.getRank(),
+                (tuple2)-> (tuple2._2.size()==4 ),
+                ()-> 1)
+        ;
     }
 
     public boolean handContainsStraightFlush(Hand targetHand) {
@@ -59,10 +68,11 @@ public class HandChecker {
 
 
     public boolean handContainsFlush(Hand targetHand) {
-        return targetHand.getCards().get().
-                groupBy(card ->card.getSuit())
-                .filter((suit, cards) ->cards.size()==5)
-                .size()==1;
+        return handConformsToCriterias(targetHand,
+                card -> card.getSuit(),
+                (tuple2)-> (tuple2._2.size()==5 ),
+                ()-> 1
+        );
     }
 
     public boolean handContainsRoyalFlush(Hand targetHand) {
@@ -71,28 +81,31 @@ public class HandChecker {
     }
 
     public boolean contains2Pairs(Hand targetHand) {
-        Function3<Integer,Integer,Hand,Boolean> generalFunction =
-                Function3.of(this::handContainsAtLeastNOccurencesOfTheSameRankGroup);
-        return generalFunction.apply(2,2,targetHand);
-    }
-
-    private boolean handContainsAtLeastNOccurencesOfTheSameRankGroup(int numOccurences,int groupSize,Hand targetHand){
-        return targetHand.getCards().get()
-                .groupBy(card -> card.getRank())
-                .filter(((suit, cards) -> cards.size()==groupSize)).size()==numOccurences;
-    }
-
-    public boolean genericContains2Pairs(Hand targetHand){
-        return  handGroupingBySize(targetHand,(card)-> card.getRank(),(tuple2)-> (tuple2._2.size()==2 ));
+        return handConformsToCriterias(targetHand,
+                card -> card.getRank(),
+                (tuple2)-> (tuple2._2.size()==2 ),
+                ()-> 2);
     }
 
 
-    private boolean handGroupingBySize(Hand targetHand, Function<Card,Criteria> groupingFunction,
-                                       Predicate<Tuple2<Criteria, List<Card>>> predicate){
+
+    /**
+     * most generic way to solve the problem using a functional style
+     * @param targetHand, cards to check
+     * @param groupingFunction, should we use rank or suit to group cards
+     * @param predicate condition for the filtering
+     * @param sizeCriteria size of packets of cards
+     * @return boolean, true if handss contains cards passing thy filtering
+     */
+    private boolean handConformsToCriterias(Hand targetHand,
+                                            Function<Card,Criteria> groupingFunction,
+                                            Predicate<Tuple2<Criteria, List<Card>>> predicate,
+                                            Function0<Integer> sizeCriteria){
         return targetHand.getCards().get()
                 .groupBy(groupingFunction)
-                .filter((card) ->predicate.test(card))
-                .size()==2;
+                .filter((card)-> predicate.test(card))
+                .size()==sizeCriteria.apply()
+                ;
 
     }
 }
