@@ -18,34 +18,28 @@ import java.util.stream.Collectors;
  *  * function application
  *  Code code be improved while using partial funnctions like this
  *
- * Function4 genericFunction = Function4.of(HandChecker::handConformsToCriterias);
- * Function3 groupByRank =genericFunction.apply(Card::getRank);
- * Refactored the handConformsToCriterias to make this call possible
+ * Beware that function application is from left to right so check your parameters order!!
  */
 public class HandChecker {
 
+    private final Function4<Function<Card,Criteria>,Predicate<Tuple2<Criteria, List<Card>>>,Function0<Integer>,Hand,Boolean> genericFunction=Function4.of(HandChecker::handConformsToCriterias);
+    private final Function3<Predicate<Tuple2<Criteria, List<Card>>>,Function0<Integer>,Hand,Boolean> groupByRank = genericFunction.apply(Card::getRank);
+    private final Function2<Function0<Integer>,Hand,Boolean> findPairs = groupByRank.apply((tuple2)-> (tuple2._2.size()==2));
 
     public boolean containsPair(Hand targetHand) {
-        return handConformsToCriterias(targetHand,
-                (tuple2)-> (tuple2._2.size()==2 ),
-                ()-> 1,
-                Card::getRank
-                );
+        return findPairs.apply(()->1,targetHand);
     }
 
     public boolean containsThreeOfAKind(Hand targetHand) {
-        return handConformsToCriterias(targetHand,
-                (tuple2)-> (tuple2._2.size()==3 ),
-                ()-> 1,
-                Card::getRank);
-
+       return groupByRank.apply((tuple2)-> (tuple2._2.size()==3 ),
+               ()-> 1,
+               targetHand);
     }
 
     public boolean containsFourOfAKind(Hand targetHand) {
-        return handConformsToCriterias(targetHand,
-                (tuple2)-> (tuple2._2.size()==4 ),
+        return groupByRank.apply((tuple2)-> (tuple2._2.size()==4 ),
                 ()-> 1,
-                Card::getRank);
+                targetHand);
     }
 
     public boolean handContainsStraightFlush(Hand targetHand) {
@@ -72,10 +66,10 @@ public class HandChecker {
 
 
     public boolean handContainsFlush(Hand targetHand) {
-        return handConformsToCriterias(targetHand,
+        return handConformsToCriterias(Card::getSuit,
                 (tuple2)-> (tuple2._2.size()==5 ),
                 ()-> 1,
-                Card::getSuit
+                targetHand
         );
     }
 
@@ -85,21 +79,20 @@ public class HandChecker {
     }
 
     public boolean contains2Pairs(Hand targetHand) {
-        return handConformsToCriterias(targetHand,
-                (tuple2)-> (tuple2._2.size()==2 ),
-                ()-> 2,
-                Card::getRank
-                );
+        return findPairs.apply( ()-> 2,
+                targetHand);
     }
 
 
 
 
-    private boolean handConformsToCriterias(Hand targetHand,
+    private static boolean handConformsToCriterias(
+                                            Function<Card,Criteria> groupingFunction,
                                             Predicate<Tuple2<Criteria, List<Card>>> predicate,
                                             Function0<Integer> sizeCriteria,
-                                            Function<Card,Criteria> groupingFunction
-    ) {
+                                            Hand targetHand
+
+                                            ) {
         return targetHand.getCards().get()
                 .groupBy(groupingFunction)
                 .filter(predicate)
